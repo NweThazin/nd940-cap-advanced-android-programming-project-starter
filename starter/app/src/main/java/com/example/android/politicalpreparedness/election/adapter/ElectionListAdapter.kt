@@ -1,11 +1,12 @@
 package com.example.android.politicalpreparedness.election.adapter
 
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-//import com.example.android.politicalpreparedness.databinding.ViewholderElectionBinding
+import com.example.android.politicalpreparedness.databinding.ViewHolderElectionBinding
 import com.example.android.politicalpreparedness.network.models.Election
 
 class ElectionListAdapter(private val clickListener: ElectionListener) :
@@ -24,10 +25,17 @@ class ElectionListAdapter(private val clickListener: ElectionListener) :
 }
 
 //TODO: Create ElectionViewHolder
-class ElectionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class ElectionViewHolder(val binding: ViewHolderElectionBinding) :
+    RecyclerView.ViewHolder(binding.root) {
     companion object {
         fun from(view: ViewGroup): ElectionViewHolder {
-            return ElectionViewHolder(view)
+            return ElectionViewHolder(
+                ViewHolderElectionBinding.inflate(
+                    LayoutInflater.from(view.context),
+                    view,
+                    false
+                )
+            )
         }
     }
 }
