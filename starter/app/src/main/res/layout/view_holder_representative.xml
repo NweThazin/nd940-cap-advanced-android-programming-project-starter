@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="representative"
+            type="com.example.android.politicalpreparedness.representative.model.Representative" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/default_padding">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/representativePhoto"
+            android:layout_width="@dimen/size_representative_image"
+            android:layout_height="@dimen/size_representative_image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_profile" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvRepresentativeName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_16dp"
+            android:textAppearance="@style/TitleFont"
+            android:textSize="@dimen/text_size_16sp"
+            app:layout_constraintStart_toEndOf="@+id/representativePhoto"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="U.S. Senator" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSecondRepresentativeName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_14sp"
+            app:layout_constraintStart_toStartOf="@+id/tvRepresentativeName"
+            app:layout_constraintTop_toBottomOf="@+id/tvRepresentativeName"
+            tools:text="U.S. Senator" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvPartyName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_12sp"
+            app:layout_constraintStart_toStartOf="@+id/tvRepresentativeName"
+            app:layout_constraintTop_toBottomOf="@+id/tvSecondRepresentativeName"
+            tools:text="U.S. Senator" />
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/twitterIcon"
+            android:layout_width="@dimen/size_icon"
+            android:layout_height="@dimen/size_icon"
+            android:foreground="?selectableItemBackground"
+            android:src="@drawable/ic_twitter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/facebookIcon"
+            android:layout_width="@dimen/size_icon"
+            android:layout_height="@dimen/size_icon"
+            android:layout_marginEnd="@dimen/default_padding"
+            android:foreground="?selectableItemBackground"
+            android:src="@drawable/ic_facebook"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/twitterIcon" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/wwwIcon"
+            android:layout_width="@dimen/size_icon"
+            android:layout_height="@dimen/size_icon"
+            android:layout_marginEnd="@dimen/default_padding"
+            android:foreground="?selectableItemBackground"
+            android:src="@drawable/ic_www"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/facebookIcon" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
