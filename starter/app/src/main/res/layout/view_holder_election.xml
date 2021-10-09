@@ -5,20 +5,25 @@
 
     <data>
 
+        <variable
+            name="item"
+            type="com.example.android.politicalpreparedness.network.models.Election" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutElection"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:selectableItemBackground"
-        android:layout_height="wrap_content"
         android:padding="@dimen/default_padding">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvElection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{item.name}"
             android:textAppearance="@style/TitleFont"
             android:textSize="@dimen/text_size_16sp"
             app:layout_constraintStart_toStartOf="parent"

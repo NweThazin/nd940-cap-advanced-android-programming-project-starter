@@ -14,5 +14,6 @@
     <string name="label_my_representatives">My Representatives</string>
 
     <!-- TODO: Add necessary string values -->
+    <string name="label_error">Error!.An expected error occurred.</string>
 
 </resources>
