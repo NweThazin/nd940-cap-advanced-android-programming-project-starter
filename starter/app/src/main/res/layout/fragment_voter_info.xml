@@ -5,124 +5,138 @@
 
     <data>
 
+        <import type="com.example.android.politicalpreparedness.network.models.Status" />
+
         <variable
             name="viewModel"
             type="com.example.android.politicalpreparedness.election.VoterInfoViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.example.android.politicalpreparedness.MainActivity">
 
-        <!-- Add title to toolbar -->
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/election_name"
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            app:isVisible="@{viewModel.status == Status.LOADING}" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
-            android:padding="@dimen/default_padding"
-            android:singleLine="true"
-            app:layout_constraintTop_toTopOf="parent"
-            app:title="@{viewModel.voterInfo.election.name}"
-            app:titleTextColor="@color/white" />
+            android:layout_height="match_parent"
+            app:isVisible="@{viewModel.status == Status.SUCCESS}">
 
-        <!-- Add visual styling -->
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/election_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/default_padding"
-            android:textAppearance="@style/TextBodyEighteenGray"
-            app:layout_constraintTop_toBottomOf="@id/election_name"
-            tools:text="12 November 2055" />
+            <!-- Add title to toolbar -->
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/election_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryDark"
+                android:padding="@dimen/default_padding"
+                android:singleLine="true"
+                app:layout_constraintTop_toTopOf="parent"
+                app:title="@{viewModel.voterInfo.election.name}"
+                app:titleTextColor="@color/white" />
 
-        <!-- Add visual styling and content -->
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/state_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_16dp"
-            android:text="@string/label_election_information"
-            android:textAppearance="@style/TextBodyColorPrimary"
-            app:layout_constraintStart_toStartOf="@id/election_date"
-            app:layout_constraintTop_toBottomOf="@id/election_date"
-            tools:text="Election Information" />
+            <!-- Add visual styling -->
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/election_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_padding"
+                android:textAppearance="@style/TextBodyEighteenGray"
+                app:layout_constraintTop_toBottomOf="@id/election_name"
+                tools:text="12 November 2055" />
 
-        <!-- Add click binding to open web URL -->
-        <!-- Add visual styling and content -->
-        <TextView
-            android:id="@+id/state_locations"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/default_padding"
-            android:layout_marginBottom="@dimen/default_padding"
-            android:clickable="true"
-            android:focusable="true"
-            android:text="@string/label_voting_locations"
-            android:textAppearance="@style/TextBodyEighteenGray"
-            android:textColor="@drawable/locations_and_ballot_info_selector"
-            app:layout_constraintStart_toStartOf="@id/election_date"
-            app:layout_constraintTop_toBottomOf="@id/state_header" />
+            <!-- Add visual styling and content -->
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/state_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_16dp"
+                android:text="@string/label_election_information"
+                android:textAppearance="@style/TextBodyColorPrimary"
+                app:layout_constraintStart_toStartOf="@id/election_date"
+                app:layout_constraintTop_toBottomOf="@id/election_date"
+                tools:text="Election Information" />
 
-        <!-- Add click binding to open web URL -->
-        <!-- Add visual styling and content -->
-        <TextView
-            android:id="@+id/state_ballot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/default_padding"
-            android:layout_marginBottom="@dimen/default_padding"
-            android:clickable="true"
-            android:focusable="true"
-            android:text="@string/label_ballot_information"
-            android:textAppearance="@style/TextBodyEighteenGray"
-            android:textColor="@drawable/locations_and_ballot_info_selector"
-            app:layout_constraintStart_toStartOf="@id/election_date"
-            app:layout_constraintTop_toBottomOf="@id/state_locations" />
+            <!-- Add click binding to open web URL -->
+            <!-- Add visual styling and content -->
+            <TextView
+                android:id="@+id/state_locations"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_padding"
+                android:layout_marginBottom="@dimen/default_padding"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="@string/label_voting_locations"
+                android:textAppearance="@style/TextBodyEighteenGray"
+                android:textColor="@drawable/locations_and_ballot_info_selector"
+                app:layout_constraintStart_toStartOf="@id/election_date"
+                app:layout_constraintTop_toBottomOf="@id/state_header" />
 
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/address_group"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:constraint_referenced_ids="state_correspondence_header,address" />
+            <!-- Add click binding to open web URL -->
+            <!-- Add visual styling and content -->
+            <TextView
+                android:id="@+id/state_ballot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_padding"
+                android:layout_marginBottom="@dimen/default_padding"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="@string/label_ballot_information"
+                android:textAppearance="@style/TextBodyEighteenGray"
+                android:textColor="@drawable/locations_and_ballot_info_selector"
+                app:layout_constraintStart_toStartOf="@id/election_date"
+                app:layout_constraintTop_toBottomOf="@id/state_locations" />
 
-        <!-- Add visual styling and content -->
-        <TextView
-            android:id="@+id/state_correspondence_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_16dp"
-            android:layout_marginBottom="0dp"
-            android:textAppearance="@style/TextBodyColorPrimary"
-            app:layout_constraintStart_toStartOf="@id/election_date"
-            app:layout_constraintTop_toBottomOf="@id/state_ballot"
-            tools:text="State Correspondence Header" />
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/address_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="state_correspondence_header,address" />
 
-        <!-- Add data binding -->
-        <TextView
-            android:id="@+id/address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/default_padding"
-            android:text="@{viewModel.address}"
-            android:textSize="@dimen/text_size_16sp"
-            app:layout_constraintStart_toStartOf="@id/election_date"
-            app:layout_constraintTop_toBottomOf="@id/state_correspondence_header"
-            app:textIsVisible="@{viewModel.address}" />
+            <!-- Add visual styling and content -->
+            <TextView
+                android:id="@+id/state_correspondence_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_16dp"
+                android:layout_marginBottom="0dp"
+                android:textAppearance="@style/TextBodyColorPrimary"
+                app:layout_constraintStart_toStartOf="@id/election_date"
+                app:layout_constraintTop_toBottomOf="@id/state_ballot"
+                tools:text="State Correspondence Header" />
 
-        <!-- Add button to save election to Room -->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/followElectionButton"
-            style="@style/PrimaryButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/default_padding"
-            android:foreground="?selectableItemBackground"
-            android:text="@string/label_follow_election"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            <!-- Add data binding -->
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_padding"
+                android:text="@{viewModel.address}"
+                android:textSize="@dimen/text_size_16sp"
+                app:layout_constraintStart_toStartOf="@id/election_date"
+                app:layout_constraintTop_toBottomOf="@id/state_correspondence_header"
+                app:textIsVisible="@{viewModel.address}" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <!-- Add button to save election to Room -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/followElectionButton"
+                style="@style/PrimaryButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_padding"
+                android:foreground="?selectableItemBackground"
+                android:text="@string/label_follow_election"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 </layout>
