@@ -15,5 +15,9 @@
 
     <!-- TODO: Add necessary string values -->
     <string name="label_error">Error!.An expected error occurred.</string>
+    <string name="label_political_preparedness">@string/app_name</string>
+    <string name="label_election_information">Election Information</string>
+    <string name="label_voting_locations">Voting Locations</string>
+    <string name="label_ballot_information">Ballot Information</string>
 
 </resources>

@@ -2,6 +2,7 @@ package com.example.android.politicalpreparedness.election.adapter
 
 import android.view.View
 import android.widget.ImageView
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.BindingAdapter
 
 object ElectionBindingAdapter {

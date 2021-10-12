@@ -20,6 +20,20 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="TextBodyEighteenGray">
+        <item name="android:textSize">@dimen/text_size_18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/neutral_gray</item>
+    </style>
+
+    <style name="TextBodyColorPrimary" parent="TextBodyEighteenGray">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="TextBodyColorPrimaryDark" parent="TextBodyEighteenGray">
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+    </style>
+
     <!-- TODO: Add necessary styles -->
 
 </resources>

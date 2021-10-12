@@ -1,11 +1,14 @@
 package com.example.android.politicalpreparedness.network.models
 
-data class Address (
-        val line1: String,
-        val line2: String? = null,
-        val city: String,
-        val state: String,
-        val zip: String
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
+data class Address(
+    val line1: String,
+    val line2: String? = null,
+    val city: String,
+    val state: String,
+    val zip: String
 ) {
     fun toFormattedString(): String {
         var output = line1.plus("\n")
