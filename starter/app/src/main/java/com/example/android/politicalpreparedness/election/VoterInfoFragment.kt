@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.politicalpreparedness.database.ElectionDatabase
@@ -53,6 +54,9 @@ class VoterInfoFragment : Fragment() {
         binding.stateBallot.setOnClickListener {
             viewModel.showBallotInformation()
         }
+        binding.followElectionButton.setOnClickListener {
+            // do to
+        }
     }
 
     private fun setupParamsValue() {
@@ -73,6 +77,8 @@ class VoterInfoFragment : Fragment() {
                     binding.electionDate.text = state.electionDate
                 }
                 is VoterInfoViewModel.ActionState.UpdateStateInfo -> {
+                    binding.stateCorrespondenceHeader.isVisible =
+                        state.correspondenceHeader.isNotEmpty()
                     binding.stateCorrespondenceHeader.text = state.correspondenceHeader
                 }
                 else -> {
@@ -83,6 +89,7 @@ class VoterInfoFragment : Fragment() {
         })
     }
 
+    //TODO: Create method to load URL intents
     private fun openIntentUrl(url: String) {
         Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse(url)
@@ -91,4 +98,4 @@ class VoterInfoFragment : Fragment() {
     }
 }
 
-//TODO: Create method to load URL intents
+

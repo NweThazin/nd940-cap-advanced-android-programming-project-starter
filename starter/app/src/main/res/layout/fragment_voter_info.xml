@@ -108,7 +108,8 @@
             android:text="@{viewModel.address}"
             android:textSize="@dimen/text_size_16sp"
             app:layout_constraintStart_toStartOf="@id/election_date"
-            app:layout_constraintTop_toBottomOf="@id/state_correspondence_header" />
+            app:layout_constraintTop_toBottomOf="@id/state_correspondence_header"
+            app:textIsVisible="@{viewModel.address}" />
 
         <!-- Add button to save election to Room -->
         <androidx.appcompat.widget.AppCompatButton
