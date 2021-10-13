@@ -6,10 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.politicalpreparedness.common.SingleLiveEvent
 import com.example.android.politicalpreparedness.database.ElectionDao
+import com.example.android.politicalpreparedness.election.enums.ElectionButtonState
 import com.example.android.politicalpreparedness.network.CivicsApi
 import com.example.android.politicalpreparedness.network.models.*
 import com.example.android.politicalpreparedness.util.DateTimeUtil
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class VoterInfoViewModel(private val dataSource: ElectionDao) : ViewModel() {
 
@@ -38,17 +41,38 @@ class VoterInfoViewModel(private val dataSource: ElectionDao) : ViewModel() {
         class ShowIntentUrl(val url: String) : ActionState()
         class UpdateElectionInfo(val electionDate: String) : ActionState()
         class UpdateStateInfo(val correspondenceHeader: String) : ActionState()
+        class ShowToastMessage(val message: String) : ActionState()
     }
-
 
     private val _actionState = SingleLiveEvent<ActionState>()
     val actionState: LiveData<ActionState> = _actionState
 
+    private val _buttonState =
+        MutableLiveData<ElectionButtonState>().apply { value = ElectionButtonState.FOLLOW_ELECTION }
+    val buttonState: LiveData<ElectionButtonState> = _buttonState
+
     fun populateVoterInfo(electionId: Int, division: Division) {
+        isVoterInfoFollowed(electionId)
         loadVoterInfo(
             address = "${division.state},${division.country}",
             electionId = electionId
         )
+    }
+
+    private fun isVoterInfoFollowed(electionId: Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val election = dataSource.getElectionById(electionId)
+                if (election == null) {
+                    // haven't followed, need to follow
+                    _buttonState.postValue(ElectionButtonState.FOLLOW_ELECTION)
+                } else {
+                    // already followed, need to unfollow
+                    _buttonState.postValue(ElectionButtonState.UNFOLLOW_ELECTION)
+                }
+            }
+        }
+
     }
 
     private fun loadVoterInfo(address: String, electionId: Int) {
@@ -116,5 +140,47 @@ class VoterInfoViewModel(private val dataSource: ElectionDao) : ViewModel() {
         }
     }
 
+    fun followUnfollowElection() {
+        voterInfo.value?.election?.let { election ->
+            when (buttonState.value) {
+                ElectionButtonState.FOLLOW_ELECTION -> {
+                    followElection(election)
+                }
+                ElectionButtonState.UNFOLLOW_ELECTION -> {
+                    unfollowElection(election.id)
+                }
+                else -> {
+                    _actionState.value = ActionState.ShowToastMessage("Wrong button state type!")
+                }
+            }
+        }
+    }
+
+    private fun followElection(election: Election) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val resultCode = dataSource.addElection(election)
+                if (resultCode > 0) {
+                    // already followed
+                    _buttonState.postValue(ElectionButtonState.UNFOLLOW_ELECTION)
+                } else {
+                    _actionState.postValue(ActionState.ShowToastMessage("Failed to follow election!"))
+                }
+            }
+        }
+    }
+
+    private fun unfollowElection(electionId: Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val resultCode = dataSource.deleteElectionById(electionId)
+                if (resultCode > 0) {
+                    _buttonState.postValue(ElectionButtonState.FOLLOW_ELECTION)
+                } else {
+                    _actionState.postValue(ActionState.ShowToastMessage("Failed to unfollow election!"))
+                }
+            }
+        }
+    }
 
 }

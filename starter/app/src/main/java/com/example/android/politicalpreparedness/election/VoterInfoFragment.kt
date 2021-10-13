@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -11,6 +12,15 @@ import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.databinding.FragmentVoterInfoBinding
 
 class VoterInfoFragment : Fragment() {
+
+    //TODO: Populate voter info -- hide views without provided data.
+    /**
+    Hint: You will need to ensure proper data is provided from previous fragment.
+     */
+    //TODO: Handle loading of URLs
+    //TODO: Handle save button UI state
+    //TODO: cont'd Handle save button clicks
+    //TODO: Create method to load URL intents
 
     private lateinit var binding: FragmentVoterInfoBinding
     private lateinit var viewModel: VoterInfoViewModel
@@ -36,14 +46,6 @@ class VoterInfoFragment : Fragment() {
         observeLiveData()
         attachedListeners()
 
-        //TODO: Populate voter info -- hide views without provided data.
-        /**
-        Hint: You will need to ensure proper data is provided from previous fragment.
-         */
-        //TODO: Handle loading of URLs
-        //TODO: Handle save button UI state
-        //TODO: cont'd Handle save button clicks
-
         return binding.root
     }
 
@@ -55,7 +57,7 @@ class VoterInfoFragment : Fragment() {
             viewModel.showBallotInformation()
         }
         binding.followElectionButton.setOnClickListener {
-            // do to
+            viewModel.followUnfollowElection()
         }
     }
 
@@ -81,6 +83,9 @@ class VoterInfoFragment : Fragment() {
                         state.correspondenceHeader.isNotEmpty()
                     binding.stateCorrespondenceHeader.text = state.correspondenceHeader
                 }
+                is VoterInfoViewModel.ActionState.ShowToastMessage -> {
+                    Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
+                }
                 else -> {
                     // do nothing
                 }
@@ -89,7 +94,6 @@ class VoterInfoFragment : Fragment() {
         })
     }
 
-    //TODO: Create method to load URL intents
     private fun openIntentUrl(url: String) {
         Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse(url)
