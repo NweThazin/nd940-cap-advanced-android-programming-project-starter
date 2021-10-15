@@ -1,40 +1,69 @@
 package com.example.android.politicalpreparedness.representative
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.AdapterView
+import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.network.models.Address
+import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
+import com.google.android.gms.location.LocationServices
 import java.util.Locale
 
 class DetailFragment : Fragment() {
 
     companion object {
-        //TODO: Add Constant for Location request
+        // Add Constant for Location request
+        private const val REQUEST_LOCATION_PERMISSION = 100
     }
 
-    //TODO: Declare ViewModel
-
+    // Declare variables
+    private lateinit var viewModel: RepresentativeViewModel
     private lateinit var binding: FragmentRepresentativeBinding
+    //  private lateinit var adapter: RepresentativeListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
-        //TODO: Establish bindings
+    ): View {
+        // binding and view model
         binding = FragmentRepresentativeBinding.inflate(layoutInflater, container, false)
+        viewModel = ViewModelProvider(this).get(RepresentativeViewModel::class.java)
+
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
+
+        viewModel.setStates(resources.getStringArray(R.array.states).toList())
+
         //TODO: Define and assign Representative adapter
-
         //TODO: Populate Representative adapter
-
         //TODO: Establish button listeners for field and location search
+        setupAdapter()
+        attachListeners()
         return binding.root
+    }
+
+
+    private fun setupAdapter() {
+    }
+
+    private fun attachListeners() {
+        binding.buttonLocation.setOnClickListener { populateCurrentLocation() }
+        binding.buttonSearch.setOnClickListener { viewModel.searchRepresentatives() }
+    }
+
+    private fun populateCurrentLocation() {
+        checkLocationPermissions()
     }
 
     override fun onRequestPermissionsResult(
@@ -42,28 +71,58 @@ class DetailFragment : Fragment() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLocation()
+            }
+        }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        //TODO: Handle location permission result to get location on permission granted
     }
 
     private fun checkLocationPermissions(): Boolean {
         return if (isPermissionGranted()) {
+            getLocation()
             true
         } else {
-            //TODO: Request Location permissions
+            requestPermission()
             false
         }
     }
 
-    private fun isPermissionGranted(): Boolean {
-        //TODO: Check if permission is already granted and return (true = granted, false = denied/other)
-
-        return true
+    private fun requestPermission() {
+        requestPermissions(
+            arrayOf(
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ),
+            REQUEST_LOCATION_PERMISSION
+        )
     }
 
+    private fun isPermissionGranted(): Boolean {
+        // Check if permission is already granted and return (true = granted, false = denied/other)
+        return checkSelfPermission(
+            requireContext(),
+            android.Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED &&
+                checkSelfPermission(
+                    requireContext(),
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+
+    }
+
+    @SuppressLint("MissingPermission")
     private fun getLocation() {
-        //TODO: Get location from LocationServices
-        //TODO: The geoCodeLocation method is a helper function to change the lat/long location to a human readable street address
+        // Get location from LocationServices
+        // The geoCodeLocation method is a helper function to change the lat/long location to a human readable street address
+        LocationServices.getFusedLocationProviderClient(requireContext())
+            .lastLocation
+            .addOnSuccessListener { location ->
+                val address = geoCodeLocation(location)
+                viewModel.setAddress(address)
+            }
+
     }
 
     private fun geoCodeLocation(location: Location): Address {
@@ -74,7 +133,7 @@ class DetailFragment : Fragment() {
                     address.thoroughfare,
                     address.subThoroughfare,
                     address.locality,
-                    address.adminArea,
+                    address.adminArea ?: "",
                     address.postalCode
                 )
             }
@@ -83,7 +142,7 @@ class DetailFragment : Fragment() {
 
     private fun hideKeyboard() {
         val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view!!.windowToken, 0)
+        imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
 
 }
