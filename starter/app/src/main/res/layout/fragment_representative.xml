@@ -117,6 +117,7 @@
                 style="@style/PrimaryButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/search_representative_selector"
                 android:clickable="true"
                 android:enabled="@{viewModel.buttonState.value}"
                 android:focusable="true"
