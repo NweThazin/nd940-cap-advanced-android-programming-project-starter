@@ -2,22 +2,19 @@ package com.example.android.politicalpreparedness.election
 
 
 import androidx.lifecycle.*
+import com.example.android.politicalpreparedness.common.PoliticalPreparednessRepository
 import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.network.CivicsApi
-import com.example.android.politicalpreparedness.network.CivicsApiService
 import com.example.android.politicalpreparedness.network.models.Election
-import com.example.android.politicalpreparedness.network.models.ElectionResponse
-import com.example.android.politicalpreparedness.network.models.Resource
 import com.example.android.politicalpreparedness.network.models.Status
 import kotlinx.coroutines.launch
-import retrofit2.Call
 
 //TODO: Construct ViewModel and provide election datasource
 class ElectionsViewModel(
     private val electionDao: ElectionDao
 ) : ViewModel() {
 
-    private val repository = ElectionRepository(CivicsApi.retrofitService)
+    private val repository = PoliticalPreparednessRepository(CivicsApi.retrofitService)
 
 
     // Create live data val for upcoming elections

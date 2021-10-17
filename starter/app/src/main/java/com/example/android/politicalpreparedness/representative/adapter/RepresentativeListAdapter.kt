@@ -29,6 +29,7 @@ class RepresentativeListAdapter :
     }
 }
 
+// Create RepresentativeDiffCallback
 class RepresentativeDiffCallback : DiffUtil.ItemCallback<Representative>() {
     override fun areItemsTheSame(oldItem: Representative, newItem: Representative): Boolean {
         return true
@@ -43,6 +44,7 @@ class RepresentativeDiffCallback : DiffUtil.ItemCallback<Representative>() {
 class RepresentativeViewHolder(val binding: ViewHolderRepresentativeBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
+    // Add companion object to inflate ViewHolder (from)
     companion object {
         fun from(parent: ViewGroup): RepresentativeViewHolder {
             return RepresentativeViewHolder(
@@ -58,14 +60,18 @@ class RepresentativeViewHolder(val binding: ViewHolderRepresentativeBinding) :
     fun bind(item: Representative) {
         binding.representative = item
         binding.representativePhoto.setImageResource(R.drawable.ic_profile)
+        binding.representative = item
 
-        //TODO: Show social links ** Hint: Use provided helper methods
-        //TODO: Show www link ** Hint: Use provided helper methods
-
+        // Show social links ** Hint: Use provided helper methods
+        item.official.channels?.let {
+            showSocialLinks(it)
+        }
+        // Show www link ** Hint: Use provided helper methods
+        item.official.urls?.let {
+            showWWWLinks(it)
+        }
         binding.executePendingBindings()
     }
-
-    //TODO: Add companion object to inflate ViewHolder (from)
 
     private fun showSocialLinks(channels: List<Channel>) {
         val facebookUrl = getFacebookUrl(channels)
@@ -107,7 +113,4 @@ class RepresentativeViewHolder(val binding: ViewHolderRepresentativeBinding) :
     }
 
 }
-
-//TODO: Create RepresentativeDiffCallback
-
 //TODO: Create RepresentativeListener

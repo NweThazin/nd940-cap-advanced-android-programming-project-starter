@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.android.politicalpreparedness.common.PoliticalPreparednessRepository
 import com.example.android.politicalpreparedness.common.SingleLiveEvent
 import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.election.enums.ElectionButtonState
@@ -25,7 +26,7 @@ class VoterInfoViewModel(private val dataSource: ElectionDao) : ViewModel() {
      * Hint: The saved state can be accomplished in multiple ways. It is directly related to how elections are saved/removed from the database.
      */
 
-    private val repository = ElectionRepository(CivicsApi.retrofitService)
+    private val repository = PoliticalPreparednessRepository(CivicsApi.retrofitService)
 
     private val _status = MutableLiveData<Status>()
     val status: LiveData<Status> = _status

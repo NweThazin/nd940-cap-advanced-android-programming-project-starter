@@ -29,6 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_16dp"
+            android:text="@{representative.official.name}"
             android:textAppearance="@style/TitleFont"
             android:textSize="@dimen/text_size_16sp"
             app:layout_constraintStart_toEndOf="@+id/representativePhoto"
@@ -37,9 +38,12 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvSecondRepresentativeName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_padding"
+            android:text="@{representative.office.name}"
             android:textSize="@dimen/text_size_14sp"
+            app:layout_constraintEnd_toStartOf="@+id/wwwIcon"
             app:layout_constraintStart_toStartOf="@+id/tvRepresentativeName"
             app:layout_constraintTop_toBottomOf="@+id/tvRepresentativeName"
             tools:text="U.S. Senator" />
@@ -48,6 +52,7 @@
             android:id="@+id/tvPartyName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{representative.official.party}"
             android:textSize="@dimen/text_size_12sp"
             app:layout_constraintStart_toStartOf="@+id/tvRepresentativeName"
             app:layout_constraintTop_toBottomOf="@+id/tvSecondRepresentativeName"

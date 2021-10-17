@@ -9,9 +9,12 @@ import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
+import android.widget.Toast
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.network.models.Address
@@ -29,7 +32,7 @@ class DetailFragment : Fragment() {
     // Declare variables
     private lateinit var viewModel: RepresentativeViewModel
     private lateinit var binding: FragmentRepresentativeBinding
-    //  private lateinit var adapter: RepresentativeListAdapter
+    private lateinit var adapter: RepresentativeListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,11 +53,26 @@ class DetailFragment : Fragment() {
         //TODO: Establish button listeners for field and location search
         setupAdapter()
         attachListeners()
+        observeLiveData()
         return binding.root
     }
 
+    private fun observeLiveData() {
+        viewModel.errorMessage.observe(viewLifecycleOwner, {
+            showToastMessage(it)
+        })
+        viewModel.representatives.observe(viewLifecycleOwner, { list ->
+            if (!list.isNullOrEmpty()) {
+                adapter.submitList(list)
+            }
+        })
+    }
 
     private fun setupAdapter() {
+        val linearLayoutManager = LinearLayoutManager(requireContext())
+        adapter = RepresentativeListAdapter()
+        binding.listMyRepresentatives.layoutManager = linearLayoutManager
+        binding.listMyRepresentatives.adapter = adapter
     }
 
     private fun attachListeners() {
@@ -119,10 +137,15 @@ class DetailFragment : Fragment() {
         LocationServices.getFusedLocationProviderClient(requireContext())
             .lastLocation
             .addOnSuccessListener { location ->
-                val address = geoCodeLocation(location)
-                viewModel.setAddress(address)
+                location?.let {
+                    val address = geoCodeLocation(it)
+                    viewModel.setAddress(address)
+                } ?: showToastMessage("Location is empty..")
             }
+    }
 
+    private fun showToastMessage(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     private fun geoCodeLocation(location: Location): Address {
@@ -133,7 +156,7 @@ class DetailFragment : Fragment() {
                     address.thoroughfare,
                     address.subThoroughfare,
                     address.locality,
-                    address.adminArea ?: "",
+                    address.adminArea,
                     address.postalCode
                 )
             }

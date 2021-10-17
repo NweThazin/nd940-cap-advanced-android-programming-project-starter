@@ -1,17 +1,19 @@
-package com.example.android.politicalpreparedness.election
+package com.example.android.politicalpreparedness.common
 
 import com.example.android.politicalpreparedness.network.CivicsApiService
 import com.example.android.politicalpreparedness.network.models.ElectionResponse
+import com.example.android.politicalpreparedness.network.models.RepresentativeResponse
 import com.example.android.politicalpreparedness.network.models.Resource
 import com.example.android.politicalpreparedness.network.models.VoterInfoResponse
+import com.example.android.politicalpreparedness.representative.model.Representative
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.awaitResponse
 import timber.log.Timber
 
-class ElectionRepository(private val apiService: CivicsApiService) {
+class PoliticalPreparednessRepository(private val apiService: CivicsApiService) {
 
-    suspend fun getElections(): Resource<ElectionResponse>? {
+    suspend fun getElections(): Resource<ElectionResponse> {
         return withContext(Dispatchers.IO) {
             try {
                 val result = apiService.getElections()
@@ -48,6 +50,20 @@ class ElectionRepository(private val apiService: CivicsApiService) {
             } catch (ex: Exception) {
                 Timber.e(ex)
                 return@withContext Resource.error(null, ex.message ?: "Unexpected Error Occurred")
+            }
+        }
+    }
+
+    suspend fun getRepresentatives(address: String): Resource<List<Representative>> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val (offices, officials) = apiService.getRepresentatives(address)
+                val representatives =
+                    offices.flatMap { office -> office.getRepresentatives(officials) }
+                Resource.success(representatives)
+            } catch (ex: Exception) {
+                Timber.e(ex)
+                Resource.error(null, ex.message ?: "Unexpected Error Occurred")
             }
         }
     }
